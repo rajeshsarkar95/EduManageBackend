@@ -26,12 +26,8 @@ exports.getNotice = async (req, res) => {
 exports.createNotice = async (req, res) => {
   req.body.publishedBy = req.user.id;
   if (req.file) req.body.attachment = `/uploads/attachments/${req.file.filename}`;
-
   const notice = await Notice.create(req.body);
-
-  // ── Send SMS if requested ──────────────────────────────────
   if (req.body.sendSms) {
-    // Gather all guardian phones
     const filter = req.body.targetType === 'class' && req.body.targetClasses?.length
       ? { class: { $in: req.body.targetClasses }, status: 'active' }
       : { status: 'active' };

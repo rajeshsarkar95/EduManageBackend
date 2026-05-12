@@ -38,8 +38,8 @@ app.use(cors({
 
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined':'dev'));
 app.use(express.json({limit:'10mb'}));
-app.use(express.urlencoded({ extended:true,limit:'10mb'}));
-app.use('/uploads', express.static(path.join(__dirname,'uploads')));
+app.use(express.urlencoded({extended:true,limit:'10mb'}));
+app.use('/uploads',express.static(path.join(__dirname,'uploads')));
 
 app.get('/api/health',(req,res)=>{
   res.json({
@@ -51,7 +51,6 @@ app.get('/api/health',(req,res)=>{
 });
 
 const API = '/api/v1';
-
 app.use(`${API}/auth`,authRoutes);
 app.use(`${API}/dashboard`,dashboardRoutes);
 app.use(`${API}/students`,studentRoutes);
@@ -77,5 +76,4 @@ app.listen(PORT,()=>{
   console.log(`📡 API Base: http://localhost:${PORT}/api/v1`);
   console.log(`🌍 Environment: ${process.env.NODE_ENV}\n`);
 });
-
 module.exports = app;
