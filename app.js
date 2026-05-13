@@ -31,10 +31,25 @@ const app = express();
 connectDB();
 app.use(helmet());
 
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://edu-manage-eta.vercel.app',
+];
+
 app.use(cors({
-  origin:process.env.CLIENT_URL || 'http://localhost:3000',
-  credentials:true,
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)){
+      return callback(null,true);
+    }
+    return callback(new Error('CORS blocked:' + origin));
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
 }));
+
+app.options('*', cors());
 
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined':'dev'));
 app.use(express.json({limit:'10mb'}));
