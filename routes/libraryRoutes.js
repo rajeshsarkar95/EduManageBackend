@@ -15,7 +15,9 @@
 const express = require('express');
 const router  = express.Router();
 const {getBooks,getBook,createBook,updateBook,deleteBook,issueBook,returnBook} = require('../controllers/otherControllers');
+
 // const {protect,authorize} = require('../middleware/auth');
+
 // router.use(protect);
 
 router.get('/',getBooks);
@@ -25,5 +27,6 @@ router.put('/:id',updateBook);
 router.delete('/:id',deleteBook);
 router.post('/:id/issue',issueBook);
 router.post('/:id/return',returnBook);
-
 module.exports = router;
+
+

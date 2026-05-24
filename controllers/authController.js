@@ -16,13 +16,11 @@ const sendToken = (user,statusCode,res) =>{
   });
 };
 
-exports.register = async (req,res) =>{
+exports.register = async (req,res)=>{
   const { name,email,password,role,phone } = req.body;
-  const user = await User.create({name,email,password,role:role || 'teacher', phone });
+  const user = await User.create({name,email,password,role:role || 'teacher',phone});
   sendToken(user,201,res);
 };
-
-
 exports.login = async (req,res)=>{
   const {email,password} = req.body;
   if (!email || !password){
@@ -30,26 +28,25 @@ exports.login = async (req,res)=>{
   }
   const user = await User.findOne({email}).select('+password');
   if (!user || !(await user.comparePassword(password))){
-    return res.status(401).json({ success: false,message:'Invalid email or password.'});
+    return res.status(401).json({success:false,message:'Invalid email or password.'});
   }
   if (!user.isActive){
     return res.status(401).json({success:false,message:'Your account has been deactivated.'});
   }
   user.lastLogin = new Date();
-  await user.save({ validateBeforeSave:false});
+  await user.save({validateBeforeSave:false});
   sendToken(user,200,res);
 };
-
-exports.getMe = async (req,res) =>{
+exports.getMe = async (req,res)=>{
   const user = await User.findById(req.user.id).populate('teacherProfile');
-  res.json({ success: true,data:user});
+  res.json({success:true,data:user});
 };
 
 exports.changePassword = async (req,res)=>{
   const {currentPassword,newPassword} = req.body;
   const user = await User.findById(req.user.id).select('+password');
   if (!(await user.comparePassword(currentPassword))){
-    return res.status(400).json({ success:false,message:'Current password is incorrect.'});
+    return res.status(400).json({success:false,message:'Current password is incorrect.'});
   }
   user.password = newPassword;
   user.passwordChangedAt = new Date();

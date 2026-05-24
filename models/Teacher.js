@@ -1,45 +1,90 @@
 const mongoose = require('mongoose');
-const teacherSchema = new mongoose.Schema({
-  name:{
-    type:String,
-    required:true,
-    trim:true,
+
+const teacherSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    fatherName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    motherName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    dob: {
+      type: Date,
+      required: true,
+    },
+    caste: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    religion: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    address: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    aadharNumber: {
+      type: String,
+      required: true,
+      unique: true,
+      match: [/^\d{12}$/, 'Aadhar number must be 12 digits'],
+    },
+    phone: {
+      type: String,
+      required: true,
+      match: [/^\d{10}$/, 'Phone number must be 10 digits'],
+    },
+    subject: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    classes: [
+      {
+        type: String,
+        trim: true,
+      },
+    ],
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+      match: [/^\S+@\S+\.\S+$/, 'Invalid email'],
+    },
+    qualification: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    experience: {
+      type:String,
+      trim:true,
+    },
+    status:{
+      type: String,
+      enum: ['Active', 'Inactive', 'On Leave'],
+      default: 'Active',
+    },
   },
-  subject:{ 
-    type: String,
-    required:true,
-    trim:true,
-  },
-  classes:[{ 
-    type:String,
-    trim:true,
-  }],
-  phone:{
-    type: String,
-    required: true,
-    match: [/^\d{10}$/,'Phone must be 10 digits'],
-  },
-  email:{
-    type:String,
-    required:true,
-    unique:true,
-    lowercase:true,
-    trim:true,
-    match: [/^\S+@\S+\.\S+$/, 'Invalid email'],
-  },
-  qualification:{
-    type:String,
-    required:true,
-    trim:true,
-  },
-  experience:{
-    type:String,
-    trim:true,
-  },
-  status:{
-    type:String,
-    enum:['Active','Inactive','On Leave'],
-    default:'Active',
-  },
-},{timestamps:true});
+  {
+    timestamps: true,
+  }
+);
+
 module.exports = mongoose.model('Teacher', teacherSchema);

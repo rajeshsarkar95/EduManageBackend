@@ -3,6 +3,7 @@
 // const ctrl     = require('../controllers/studentController');
 // const {protect,authorize} = require('../middleware/auth');
 // const upload   = require('../middleware/upload');
+
 // router.use(protect);
 // router.get('/stats',ctrl.getStats);
 // router.get('/class/:classId',ctrl.getStudentsByClass);
@@ -17,14 +18,17 @@ const express  = require('express');
 const router   = express.Router();
 const ctrl     = require('../controllers/studentController');
 // const {protect,authorize} = require('../middleware/auth');
-const upload   = require('../middleware/upload');
+// const upload   = require('../middleware/upload');
+
 // router.use(protect);
 
 router.get('/stats',ctrl.getStats);
 router.get('/class/:classId',ctrl.getStudentsByClass);
 router.get('/',ctrl.getStudents);
-router.post('/',upload.single('photo'),ctrl.createStudent);
+router.post('/',ctrl.createStudent);
 router.get('/:id',ctrl.getStudent);
-router.put('/:id',upload.single('photo'),ctrl.updateStudent);
+router.put('/:id',ctrl.updateStudent);
 router.delete('/:id',ctrl.deleteStudent);
 module.exports = router;
+
+

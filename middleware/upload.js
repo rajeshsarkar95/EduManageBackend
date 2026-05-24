@@ -8,7 +8,7 @@ dirs.forEach(dir => { if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: tr
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     let folder = 'uploads/documents';
-    if (file.fieldname === 'photo')      folder = 'uploads/photos';
+    if (file.fieldname === 'photo')folder = 'uploads/photos';
     if (file.fieldname === 'attachment') folder = 'uploads/attachments';
     cb(null, folder);
   },

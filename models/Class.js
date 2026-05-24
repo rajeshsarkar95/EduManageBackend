@@ -15,8 +15,8 @@ classSchema.index({ name: 1,section:1,session:1},{unique:true});
 classSchema.virtual('fullName').get(function(){
   return `${this.name}-${this.section}`;
 });
-classSchema.virtual('studentCount', {
+classSchema.virtual('studentCount',{
   ref: 'Student', localField: '_id', foreignField: 'class', count: true,
 });
-classSchema.set('toJSON', { virtuals: true });
+classSchema.set('toJSON', {virtuals:true});
 module.exports = mongoose.model('Class', classSchema);

@@ -16,6 +16,7 @@ exports.getClass = async (req,res)=>{
   if (!cls) return res.status(404).json({ success: false, message: 'Class not found.'});
   res.json({success:true,data:cls});
 };
+
 exports.createClass = async (req, res)=>{
   const cls = await Class.create(req.body);
   res.status(201).json({ success: true, message:'Class created.',data:cls});

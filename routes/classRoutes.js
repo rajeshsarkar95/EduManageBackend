@@ -1,4 +1,4 @@
-// // classRoutes.js
+// classRoutes.js
 // const express = require('express');
 // const router  = express.Router();
 // const ctrl = require('../controllers/classController');
@@ -16,15 +16,16 @@
 const express = require('express');
 const router  = express.Router();
 const ctrl = require('../controllers/classController');
-const {protect,authorize} = require('../middleware/auth');
+// const { protect, authorize } = require('../middleware/auth');
+
 
 // router.use(protect);
-
-router.get('/',ctrl.getClasses);
+router.get('/',      ctrl.getClasses);
 router.post('/',ctrl.createClass);
 router.get('/:id',ctrl.getClass);
-router.put('/:id',ctrl.updateClass);
-router.delete('/:id',ctrl.deleteClass);
-
+router.put('/:id', ctrl.updateClass);
+router.delete('/:id', ctrl.deleteClass);
 module.exports = router;
+
+
  

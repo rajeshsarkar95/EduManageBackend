@@ -12,7 +12,6 @@ const transportSchema = new mongoose.Schema({
   routeNumber:{type: String,unique:true,sparse:true},
   busNumber:{type:String,required:true,uppercase:true},
   busCapacity:{type:Number,default:40},
-
   driver:{
     name:{type:String,required:true},
     phone:{type: String,required:true},
