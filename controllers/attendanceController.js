@@ -8,14 +8,14 @@ exports.markAttendance = async (req,res)=>{
   const attendanceDate = new Date(date);
   attendanceDate.setHours(0,0,0,0);
   let attendance = await Attendance.findOneAndUpdate(
-    { class:classId,date:attendanceDate},
+    {class:classId,date:attendanceDate},
     {
       class:classId,
       date:attendanceDate,
       records,
       note,
-      markedBy: req.user.id,
-      markedAt: new Date(),
+      markedBy:req.user.id,
+      markedAt:new Date(),
     },
    {new:true,upsert:true,runValidators:true}
   );
@@ -25,7 +25,7 @@ exports.markAttendance = async (req,res)=>{
       _id: {$in:absentRecords.map(r => r.studentId)},
     }).select('name guardian rollNumber');
     for (const student of absentStudents){
-      const msg = `Dear Parent, your ward ${student.name} (Roll: ${student.rollNumber}) was ABSENT today (${new Date(date).toLocaleDateString('en-IN')}). Please contact school for details.`;
+      const msg = `Dear Parent, your ward ${student.name}(Roll: ${student.rollNumber}) was ABSENT today (${new Date(date).toLocaleDateString('en-IN')}). Please contact school for details.`;
       try {
         const result = await sendSMS(student.guardian.phone,msg);
         await SmsLog.create({
@@ -47,6 +47,7 @@ exports.markAttendance = async (req,res)=>{
   }
   res.status(201).json({success:true,message:'Attendance marked.',data: attendance});
 };
+
 exports.getAttendance = async (req,res)=>{
   const {classId,date} = req.query;
   const filter = {};
@@ -59,35 +60,38 @@ exports.getAttendance = async (req,res)=>{
   const records = await Attendance.find(filter)
     .populate('class', 'name section')
     .populate('records.student', 'name rollNumber')
-    .populate('markedBy', 'name')
-    .sort({ date: -1 });
-  res.json({success:true,count:records.length,data:records});
+    .populate('markedBy','name')
+    .sort({ date:-1});
+    res.json({success:true,count:records.length,data:records});
 };
 
 exports.getStudentAttendance = async (req,res)=>{
-  const { studentId } = req.params;
+  const {studentId} = req.params;
   const start = new Date(req.query.startDate || new Date().setDate(1));
   const end   = new Date(req.query.endDate   || new Date());
+
   const stats = await Attendance.getStudentAttendance(studentId,start,end);
   const records = await Attendance.find({
-    date: { $gte: start, $lte:end},
-    'records.student': studentId,
+    date: { $gte: start,$lte:end},
+    'records.student':studentId,
   }).sort({date:-1});
   const detail = records.map(r =>({
     date:r.date,
     status:r.records.find(x => x.student.toString() === studentId)?.status,
   }));
-  res.json({ success:true,data:{stats,records:detail}});
+  res.json({success:true,data:{stats,records:detail}});
 };
+
 exports.getMonthlyReport = async (req,res)=>{
-  const { classId, month, year } = req.query;
+  const {classId,month,year} = req.query;
   const y = parseInt(year  || new Date().getFullYear());
   const m = parseInt(month || new Date().getMonth() + 1) - 1;
-  const start = new Date(y, m, 1);
-  const end   = new Date(y, m + 1, 0);
+
+  const start = new Date(y,m,1);
+  const end   = new Date(y,m+1,0);
   const records = await Attendance.find({
     class: classId,
     date: {$gte:start,$lte:end},
   }).populate('records.student','name rollNumber');
-  res.json({ success:true,data:records});
+  res.json({success:true,data:records});
 };

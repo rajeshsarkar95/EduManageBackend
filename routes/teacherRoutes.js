@@ -2,19 +2,15 @@ const express = require('express');
 const router  = express.Router();
 const ctrl    = require('../controllers/teacherController');
 
-// const {protect,authorize} = require('../middleware/auth');
+const { protect, authorize } = require('../middleware/auth');
 
-// const upload  = require('../middleware/upload');
+router.use(protect);
 
-// router.use(protect);
-
+router.post('/',authorize('admin'), ctrl.createTeacher);
+router.put('/:id',authorize('admin'), ctrl.updateTeacher);
+router.delete('/:id',authorize('admin'), ctrl.deleteTeacher);
 router.get('/stats',ctrl.getStats);
 router.get('/',ctrl.getTeachers);
-router.post('/',ctrl.createTeacher);
-router.get( '/:id',ctrl.getTeacher);
-router.put( '/:id',ctrl.updateTeacher);
-router.delete('/:id',ctrl.deleteTeacher);
+router.get('/:id',ctrl.getTeacher);
 
 module.exports = router;
-
-
