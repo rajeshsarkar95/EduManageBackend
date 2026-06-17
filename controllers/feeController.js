@@ -38,11 +38,11 @@ exports.createFee = async (req,res)=>{
     if (student.match(/^[0-9a-fA-F]{24}$/)){
       studentDoc = await Student.findById(student);
     } else {
-      studentDoc = await Student.findOne({ name: new RegExp(`^${student}$`, 'i')});
+      studentDoc = await Student.findOne({ name: new RegExp(`^${student}$`,'i')});
       if (!studentDoc){
         const allStudents = await Student.find({},'name _id');
         studentDoc = allStudents.find(s =>
-          s.name.replace(/\s+/g, '').toLowerCase() === student.replace(/\s+/g, '').toLowerCase()
+          s.name.replace(/\s+/g,'').toLowerCase() === student.replace(/\s+/g,'').toLowerCase()
         );
       }
     }
@@ -102,8 +102,6 @@ exports.recordPayment = async (req,res)=>{
     res.status(500).json({success:false,message:err.message});
   }
 };
-
-
 exports.getFeeStats = async (req, res) => {
   try {
     const stats = await Fee.aggregate([
@@ -126,7 +124,6 @@ exports.getFeeStats = async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 };
-
 exports.sendFeeReminders = async (req,res)=>{
   try {
     const fees = await Fee.find({ status:{$in:['pending','overdue']}})
@@ -155,21 +152,17 @@ exports.sendFeeReminders = async (req,res)=>{
     res.status(500).json({ success: false,message:err.message});
   }
 };
-
 exports.deleteFee = async (req, res) => {
   try {
     const fee = await Fee.findById(req.params.id);
     if (!fee) return res.status(404).json({ success: false, message: 'Fee record not found.' });
-
     const force = req.query.force === 'true';  
-
     if (!force && fee.paidAmount > 0) {
       return res.status(400).json({
         success: false,
         message: `Cannot delete fee record with recorded payments of ₹${fee.paidAmount}. Use ?force=true to override.`
       });
     }
-
     await Fee.findByIdAndDelete(req.params.id);
     res.json({ success: true, message: 'Fee record deleted successfully.' });
   } catch (err) {

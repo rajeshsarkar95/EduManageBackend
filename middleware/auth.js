@@ -23,13 +23,12 @@ exports.protect = async (req,res,next)=>{
     return res.status(401).json({success:false,message:'Invalid or expired token.'});
   }
 };
-
 exports.authorize = (...roles)=>{
   return (req,res,next)=>{
     if (!roles.includes(req.user.role)){
       return res.status(403).json({
         success:false,
-        message: `Role '${req.user.role}'is not authorized to access this route.`,
+        message:`Role '${req.user.role}'is not authorized to access this route.`,
       });
     }
     next();
@@ -38,4 +37,4 @@ exports.authorize = (...roles)=>{
 exports.adminOnly = [
   exports.protect,
   exports.authorize('admin'),
-];
+]

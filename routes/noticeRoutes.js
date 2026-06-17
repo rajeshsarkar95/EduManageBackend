@@ -1,14 +1,29 @@
+// const express = require('express');
+// const router  = express.Router();
+// const ctrl    = require('../controllers/noticeController');
+// const { protect, authorize } = require('../middleware/auth');
+// const upload  = require('../middleware/upload');
+
+// router.use(protect);
+
+// router.get('/',ctrl.getNotices);
+// router.post('/',authorize('admin'),upload.single('attachment'),ctrl.createNotice);
+// router.get('/:id',ctrl.getNotice);
+// router.put('/:id',authorize('admin'),ctrl.updateNotice);
+// router.delete('/:id',authorize('admin'),ctrl.deleteNotice);
+// module.exports = router;
+
 const express = require('express');
 const router  = express.Router();
 const ctrl    = require('../controllers/noticeController');
-const { protect, authorize } = require('../middleware/auth');
-const upload  = require('../middleware/upload');
+// const { protect, authorize } = require('../middleware/auth');
+// const upload  = require('../middleware/upload');
 
-router.use(protect);
+// router.use(protect);
 
 router.get('/',ctrl.getNotices);
-router.post('/',authorize('admin'),upload.single('attachment'),ctrl.createNotice);
+router.post('/',ctrl.createNotice);
 router.get('/:id',ctrl.getNotice);
-router.put('/:id',authorize('admin'),ctrl.updateNotice);
-router.delete('/:id',authorize('admin'),ctrl.deleteNotice);
+router.put('/:id',ctrl.updateNotice);
+router.delete('/:id',ctrl.deleteNotice);
 module.exports = router;
